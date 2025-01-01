@@ -1,0 +1,21 @@
+{
+    "population_size": 100,
+    "num_generations": 50,
+    "crossover_probability": 0.7,
+    "mutation_probability": 0.2,
+    "crossover": {
+      "operator": "cxBlend",
+      "params": {
+        "alpha": 0.5
+      }
+    },
+    "mutation": {
+      "operator": "mutGaussian",
+      "params": {
+        "mu": 0.0,
+        "sigma": 1.0,
+        "indpb": 0.2
+      }
+    }
+  }
+  
