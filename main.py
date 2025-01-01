@@ -24,16 +24,14 @@ except Exception as e:
 
 
 # Run the NSGA (Genetic Algorithm)
-# print("\n=== Running NSGA-II Genetic Algorithm ===")
-# nsga = nsgaGA(config, parameter_ranges)
+print("\n=== Running NSGA-II Genetic Algorithm ===")
+# nsga = nsgaGA(config_nsga, parameter_ranges)
 # pareto_front, pareto_fitness = nsga.run(simulate)
-# print("\n=== NSGA-II Complete ===")
+print("\n=== NSGA-II Complete ===")
 
 
-# Run the SARSA Reinforcement Learning Algorithm
+# Run the SARSA (Reinforcement Learning Algorithm)
 print("\n=== Running SARSA Reinforcement Learning ===")
 sarsa = sarsaRL(config_sarsa, parameter_ranges)
-best_state, best_fitness = sarsa.run(simulate)
+best_state, best_fitness = sarsa.run(sarsaRL.evaluate_function)
 print("\n=== SARSA Complete ===")
-# print(f"Best Setup: {best_state}")
-# print(f"Best Fitness: {best_fitness}")
