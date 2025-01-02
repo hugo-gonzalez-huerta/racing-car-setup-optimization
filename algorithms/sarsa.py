@@ -1,11 +1,19 @@
 import random
 import numpy as np
 
+from typing import Callable, Tuple, List, Dict
 from simulator.sim import simulate
 
 
 class sarsaRL:
-    def __init__(self, config: dict, parameter_ranges: dict):
+    def __init__(self, config: Dict[str, float], parameter_ranges: Dict[str, Tuple[float, float]]) -> None:
+        """
+        Initializes the SARSA reinforcement learning agent.
+
+        Args:
+            config (dict): Configuration dictionary containing alpha, gamma, epsilon, episodes, and steps.
+            parameter_ranges (dict): Ranges of parameters for car setups.
+        """
         self.config = config
         self.parameter_ranges = parameter_ranges
         self.alpha = config["alpha"]  # Learning rate
@@ -16,30 +24,44 @@ class sarsaRL:
         self.q_table = self._initialize_q_table()
 
 
-    def _initialize_q_table(self):
-        """Initializes the Q-table with random values for each state-action pair."""
+    def _initialize_q_table(self) -> np.ndarray:
+        """
+        Initializes the Q-table with random values for each state-action pair.
+
+        Returns:
+            np.ndarray: The Q-table with dimensions based on states and actions.
+        """
         num_states = len(self.parameter_ranges)
-        num_actions = len(self.parameter_ranges) # ALOMEJOR HAY QUE AÑADIR MAS ACCIONES (>12)
-        return np.random.uniform(low=-1, high=1, size=(num_states, num_actions))
+        num_actions = len(self.parameter_ranges)  # ALOMEJOR HAY QUE AÑADIR MAS ACCIONES (>12)
+        return np.random.uniform(low=-1, high=1, size=(num_states, num_actions))  # ALOMEJOR AÑADIR UN RANGO MAS GRANDE
     
 
-    def select_action(self, state):
-        """Selects an action using an epsilon-greedy strategy."""
+    def select_action(self, state: int) -> int:
+        """
+        Selects an action using an epsilon-greedy strategy.
+
+        Args:
+            state (int): The current state index.
+
+        Returns:
+            int: The selected action index.
+        """
         if random.uniform(0, 1) < self.epsilon:
             return random.randint(0, len(self.q_table[state]) - 1)  # Explore
         else:
             return np.argmax(self.q_table[state])  # Exploit
         
-    
-    def evaluate_function(state, action, parameter_ranges):
+
+    @staticmethod
+    def evaluate_function(state: int, action: int, parameter_ranges: Dict[str, Tuple[float, float]]) -> float:
         """
         Evaluates a fitness score for a given state and action using the simulate function.
-        
+
         Args:
             state (int): Current state index.
             action (int): Action index leading to a car setup.
             parameter_ranges (dict): Dictionary of parameter ranges for the car setup.
-        
+
         Returns:
             float: Composite fitness score.
         """
@@ -47,23 +69,24 @@ class sarsaRL:
         setup = [
             random.uniform(*parameter_ranges[param]) for param in parameter_ranges
         ]
-        
+
         # Simulate the performance
         lap_time, max_speed, distance_covered, damage = simulate(setup)
 
         # Define a fitness function (example: prioritize lap time and minimize damage)
-        fitness = -lap_time + 0.1 * max_speed + 0.01 * distance_covered - 0.5 * damage # MODIFICAR
+        fitness = -lap_time + 0.1 * max_speed + 0.01 * distance_covered - 0.5 * damage
         return fitness
     
 
-    def run(self, evaluate_function):
-        """Executes the SARSA algorithm to find the optimal policy.
+    def run(self, evaluate_function: Callable[[int, int, Dict[str, Tuple[float, float]]], float]) -> Tuple[List, float]:
+        """
+        Executes the SARSA algorithm to find the optimal policy.
 
         Args:
             evaluate_function (callable): Function to evaluate the fitness of a setup.
 
         Returns:
-            Tuple[List, List]: Best setup and its fitness.
+            Tuple[List, float]: Best setup (state and action) and its fitness score.
         """
         best_setup = None
         best_fitness = -float("inf")

@@ -25,13 +25,13 @@ except Exception as e:
 
 # Run the NSGA (Genetic Algorithm)
 print("\n=== Running NSGA-II Genetic Algorithm ===")
-# nsga = nsgaGA(config_nsga, parameter_ranges)
-# pareto_front, pareto_fitness = nsga.run(simulate)
-print("\n=== NSGA-II Complete ===")
+nsga = nsgaGA(config_nsga, parameter_ranges)
+pareto_front, pareto_fitness = nsga.run(simulate)
+print("\n=== NSGA-II Complete ===") # FALTA DEFINIR CUAL ES EL MEJOR SETUP QUE OBTIENE EL ALGORITMO
 
 
 # Run the SARSA (Reinforcement Learning Algorithm)
 print("\n=== Running SARSA Reinforcement Learning ===")
 sarsa = sarsaRL(config_sarsa, parameter_ranges)
-best_state, best_fitness = sarsa.run(sarsaRL.evaluate_function)
+best_state, best_fitness = sarsa.run(sarsa.evaluate_function)
 print("\n=== SARSA Complete ===")
