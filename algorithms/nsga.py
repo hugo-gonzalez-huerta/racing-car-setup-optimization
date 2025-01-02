@@ -1,11 +1,18 @@
 import random
 
 from deap import base, creator, tools
-from typing import List, Tuple
+from typing import List, Tuple, Callable
 
 
 class nsgaGA:
     def __init__(self, config: dict, parameter_ranges: dict):
+        """
+        Initializes the genetic algorithm with the given configuration and parameter ranges.
+
+        Args:
+            config (dict): Configuration dictionary with GA parameters (population size, generations, etc.).
+            parameter_ranges (dict): Dictionary specifying the parameter ranges for the individuals.
+        """
         self.config = config
         self.parameter_ranges = parameter_ranges
 
@@ -22,7 +29,15 @@ class nsgaGA:
 
 
     def _initialize_deap(self):
-        """Sets up DEAP framework components."""
+        """
+        Sets up the DEAP framework components, including fitness function, individual creation,
+        and genetic operators like crossover and mutation.
+
+        Registers the following operators in the toolbox:
+            - mate: Crossover operator
+            - mutate: Mutation operator
+            - select: NSGA2 selection operator
+        """
         creator.create("Multi_Objective_Fitness", base.Fitness, weights=(-1.0, 1.0, 1.0, -1.0))
         creator.create("Individual", list, fitness=creator.Multi_Objective_Fitness)
 
@@ -41,22 +56,31 @@ class nsgaGA:
 
 
     def create_individual(self) -> List[float]:
-        """Creates an individual by generating random values for each parameter."""
+        """
+        Creates an individual by generating random values for each parameter in the parameter range.
+
+        Returns:
+            List[float]: A list of randomly generated values representing an individual in the population.
+        """
         individual = []
         for range in self.parameter_ranges.values():
             min_val, max_val = range
             individual.append(random.uniform(min_val, max_val))
         return individual
-    
+     
 
-    def run(self, evaluate_function) -> Tuple[List, List]:
-        """Executes the genetic algorithm and returns the Pareto front and their fitness values.
+    def run(self, evaluate_function: Callable[[List[float]], Tuple[float, float, float, float]]) -> Tuple[List, List]:
+        """
+        Executes the genetic algorithm and returns the Pareto front and their fitness values.
 
         Args:
-            evaluate_function (callable): Function to evaluate the fitness of an individual.
+            evaluate_function (Callable): Function to evaluate the fitness of an individual. It should return
+                                          a tuple with four values (lap_time, max_speed, distance_covered, damage).
 
         Returns:
-            Tuple[List, List]: Pareto front individuals and their fitness values.
+            Tuple[List, List]: A tuple containing two lists:
+                - The first list is the Pareto front (a list of non-dominated individuals).
+                - The second list contains the corresponding fitness values for the individuals in the Pareto front.
         """
         self.toolbox.register("evaluate", evaluate_function)
 
