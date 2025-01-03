@@ -1,0 +1,12 @@
+{
+    "alpha": 0.001,
+    "gamma": 0.99,
+    "epsilon": 0.9,
+    "epsilon_decay": 0.995,
+    "epsilon_min": 0.1,
+    "episodes": 1000,
+    "steps": 200,
+    "batch_size": 32,
+    "replay_buffer_size": 10000
+  }
+  
