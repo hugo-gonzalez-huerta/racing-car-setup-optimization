@@ -1,14 +1,13 @@
 {
-    "Front_rear_Weight_repartition": [0.0, 1.0],
-    "Cx": [0.2, 2.0],
-    "Front_Clift": [0.0, 1.5],
-    "Rear_Clift": [0.0, 1.5],
+    "Front_rear_weight_repartition": [0.0, 1.0],
+    "Front_right_left_weight_repartition": [0.3, 0.7],
+    "Rear_right_left_weight_repartition": [0.3, 0.7],
     "Front_wing_angle": [0, 12],
     "Rear_wing_angle": [0, 18],
-    "Front_axle_inertia": [0.0050, 0.0150],
-    "Rear_axle_inertia": [0.0050, 0.0150],
-    "Wheel_toe": [-1, 1],
+    "Suspension_spring": [500, 10000],
+    "Rear_differential_ratio": [1, 10],
+    "Brake_max_pressure": [5000, 40000],
     "Wheel_stiffness": [20.0, 30.0],
-    "Front_wheel_camber": [-5, -3],
-    "Rear_wheel_camber": [-5, -2]
+    "Rear_axle_roll_center_height": [0, 0.5],
+    "Front_axle_roll_center_height": [0, 0.5]
 }
